@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bien index{% endblock %}
+
+{% block body %}
+    <h1>Bien index</h1>
+
+    <form method="get" action="{{ path('app_bien_index') }}">
+        <input type="text" name="q" placeholder="Search title or description" value="{{ app.request.get('q') }}">
+        <select name="type">
+            <option value="">All types</option>
+            <option value="house" {% if selected_type == 'house' %}selected{% endif %}>House</option>
+            <option value="apartment" {% if selected_type == 'apartment' %}selected{% endif %}>Apartment</option>
+        </select>
+        <button type="submit">Search</button>
+        {% if selected_type or app.request.get('q') %}
+            <a href="{{ path('app_bien_index') }}">clear</a>
+        {% endif %}
+    </form>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>Type</th>
+                <th>Prix</th>
+                <th>Surface</th>
+                <th>Adresse</th>
+                <th>Statut</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bien in biens %}
+            <tr>
+                <td>{{ bien.id }}</td>
+                <td>{{ bien.titre }}</td>
+                <td>{{ bien.description }}</td>
+                <td>{{ bien.type }}</td>
+                <td>{{ bien.prix }}</td>
+                <td>{{ bien.surface }}</td>
+                <td>{{ bien.adresse }}</td>
+                <td>{{ bien.statut }}</td>
+                <td>
+                    <a href="{{ path('app_bien_show', {'id': bien.id}) }}">show</a>
+                    <a href="{{ path('app_bien_edit', {'id': bien.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="9">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if app.user %}
+        <a href="{{ path('app_bien_new') }}">Create new</a>
+    {% endif %}
+{% endblock %}

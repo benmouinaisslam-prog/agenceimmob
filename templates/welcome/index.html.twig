@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Agence Immobilière | Achat & Vente{% endblock %}
+
+{% block body %}
+
+<link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Agence Immobilière</h1>
+        <p>Achetez et vendez maisons, appartements et locaux commerciaux</p>
+        <a href="#biens" class="btn">Voir les biens</a>
+    </div>
+</section>
+
+<!-- PROPERTIES -->
+<section class="container" id="biens">
+    <h2 class="section-title">Nos Biens Immobiliers</h2>
+
+    <div class="cards">
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1572120360610-d971b9d7767c" alt="Maison">
+            <div class="card-content">
+                <h3>Maison Moderne</h3>
+                <p>4 chambres · Jardin · Garage</p>
+                <span class="price">1 200 000 MAD</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1507089947368-19c1da9775ae" alt="Appartement">
+            <div class="card-content">
+                <h3>Appartement Centre-ville</h3>
+                <p>3 chambres · Balcon · Parking</p>
+                <span class="price">850 000 MAD</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1582407947304-fd86f028f716" alt="Local commercial">
+            <div class="card-content">
+                <h3>Local Commercial</h3>
+                <p>Idéal pour boutique ou bureau</p>
+                <span class="price">1 500 000 MAD</span>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    <p>© 2025 Agence Immobilière – Tous droits réservés</p>
+</footer>
+
+{% endblock %}
