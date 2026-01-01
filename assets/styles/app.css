@@ -1,3 +1,236 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap');
+
+:root {
+    --bg: #0b1021;
+    --card: #0f172a;
+    --muted: #94a3b8;
+    --accent: #fbbf24;
+    --accent-strong: #f59e0b;
+    --border: rgba(255, 255, 255, 0.08);
+    --text: #e2e8f0;
+    --heading: #f8fafc;
+}
+
+* {
+    box-sizing: border-box;
+}
+
 body {
-    background-color: skyblue;
+    margin: 0;
+    font-family: 'Manrope', 'Segoe UI', sans-serif;
+    background: radial-gradient(circle at 20% 20%, rgba(251, 191, 36, 0.08), transparent 25%),
+                radial-gradient(circle at 80% 0%, rgba(245, 158, 11, 0.16), transparent 30%),
+                linear-gradient(160deg, #0b1021 0%, #0f172a 60%, #0b132b 100%);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--accent-strong);
+}
+
+header {
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(10px);
+    background: rgba(15, 23, 42, 0.75);
+    z-index: 10;
+}
+
+.brand {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--heading);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+}
+
+.brand-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    display: grid;
+    place-items: center;
+    color: #1f2937;
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35);
+}
+
+nav a {
+    margin-left: 18px;
+    color: var(--muted);
+    font-weight: 600;
+}
+
+nav a.active,
+nav a:hover {
+    color: var(--heading);
+}
+
+main {
+    padding: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(245, 158, 11, 0.16));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 28px;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.25);
+}
+
+.hero h1 {
+    margin: 0 0 8px;
+    color: var(--heading);
+    letter-spacing: -0.5px;
+}
+
+.hero p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.filters,
+.form-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.filters form,
+.form-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.filters form {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    align-items: end;
+}
+
+.btn {
+    background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+    color: #0b1021;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn.outline {
+    background: transparent;
+    color: var(--heading);
+    border: 1px solid var(--border);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    display: grid;
+    gap: 10px;
+}
+
+.card h3 {
+    margin: 0;
+    color: var(--heading);
+}
+
+.meta {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.pill {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.14);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.stack {
+    display: grid;
+    gap: 6px;
+}
+
+form .field {
+    display: grid;
+    gap: 6px;
+}
+
+form label {
+    font-weight: 600;
+    color: var(--heading);
+}
+
+form input,
+form select,
+form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #0b1021;
+    color: var(--text);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+th,
+td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+th {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+tr:last-child td {
+    border-bottom: none;
 }

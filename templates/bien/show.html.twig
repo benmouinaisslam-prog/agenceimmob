@@ -1,56 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bien{% endblock %}
+{% block title %}{{ bien.titre }}{% endblock %}
 
 {% block body %}
-    <h1>Bien</h1>
+    <section class="hero">
+        <h1>{{ bien.titre }}</h1>
+        <p>{{ bien.localisation }} — {{ bien.type|capitalize }}</p>
+    </section>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ bien.id }}</td>
-            </tr>
-            <tr>
-                <th>Titre</th>
-                <td>{{ bien.titre }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ bien.description }}</td>
-            </tr>
-            <tr>
-                <th>Type</th>
-                <td>{{ bien.type }}</td>
-            </tr>
-            <tr>
-                <th>Prix</th>
-                <td>{{ bien.prix }}</td>
-            </tr>
-            <tr>
-                <th>Surface</th>
-                <td>{{ bien.surface }}</td>
-            </tr>
-            <tr>
-                <th>Adresse</th>
-                <td>{{ bien.adresse }}</td>
-            </tr>
-            <tr>
-                <th>Statut</th>
-                <td>{{ bien.statut }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="grid" style="grid-template-columns: 2fr 1fr; gap: 18px;">
+        <article class="card">
+            {% if bien.mainImagePath %}
+                <img src="/{{ bien.mainImagePath }}" alt="{{ bien.titre }}" style="width:100%;border-radius:12px;">
+            {% endif %}
+            <div class="pill" style="margin-top:10px;">{{ bien.statut }}</div>
+            <p class="meta">Publié le {{ bien.publishedAt ? bien.publishedAt|date('d/m/Y H:i') : 'n.c.' }}</p>
+        </article>
 
-    <a href="{{ path('app_bien_index') }}">back to list</a>
-
-    <p>
-        <a href="mailto:info@example.test?subject={{ 'Inquiry about' ~ ' ' ~ bien.titre }}&body=Hello,%0A%0AI would like more information about "{{ bien.titre }}" (ID: {{ bien.id }}).">Contact seller</a>
-    </p>
-
-    {% if app.user %}
-        <a href="{{ path('app_bien_edit', {'id': bien.id}) }}">edit</a>
-
-        {{ include('bien/_delete_form.html.twig') }}
-    {% endif %}
+        <article class="card">
+            <div class="stack">
+                <strong>{{ bien.prix|number_format(0, '', ' ') }} €</strong>
+                <span class="meta">Ascenseur : {{ bien.ascenseur ? 'Oui' : 'Non' }} • Parking : {{ bien.parking ? 'Oui' : 'Non' }}</span>
+                <span class="meta">Localisation : {{ bien.localisation }}</span>
+                <span class="meta">Statut : {{ bien.statut }}</span>
+                {% if bien.contactVendeur %}
+                    <span class="meta">Contact vendeur : {{ bien.contactVendeur }}</span>
+                {% endif %}
+            </div>
+            <div class="card-actions" style="margin-top:12px;">
+                <a class="btn outline" href="{{ path('app_bien_index') }}">Retour</a>
+            </div>
+            {% if app.user %}
+                <div class="card-actions" style="margin-top:8px;">
+                    <a href="{{ path('app_bien_edit', {'id': bien.id}) }}">Modifier</a>
+                    {{ include('bien/_delete_form.html.twig') }}
+                </div>
+            {% endif %}
+        </article>
+    </div>
 {% endblock %}

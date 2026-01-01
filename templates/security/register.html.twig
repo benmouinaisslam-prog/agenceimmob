@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <div class="card" style="max-width:480px;margin:0 auto;">
+        <h1>Créer un compte</h1>
+        <p class="meta">Accédez à la mise en ligne et au suivi de vos annonces.</p>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="pill" style="margin-bottom:10px;">{{ message }}</div>
+            {% endfor %}
+        {% endfor %}
+
+        {{ form_start(registrationForm) }}
+            {{ form_row(registrationForm.email) }}
+            <div class="grid" style="grid-template-columns:1fr 1fr; gap:12px;">
+                {{ form_row(registrationForm.nom) }}
+                {{ form_row(registrationForm.prenom) }}
+            </div>
+            {{ form_row(registrationForm.telephone) }}
+            {{ form_row(registrationForm.plainPassword.first) }}
+            {{ form_row(registrationForm.plainPassword.second) }}
+            {{ form_row(registrationForm.submit) }}
+        {{ form_end(registrationForm) }}
+
+        <p class="meta" style="margin-top:12px;">Déjà inscrit ? <a href="{{ path('app_login') }}">Connectez-vous</a>.</p>
+    </div>
+{% endblock %}

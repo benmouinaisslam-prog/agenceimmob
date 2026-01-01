@@ -6,6 +6,7 @@ use App\Entity\Bien;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class BienType extends AbstractType
@@ -14,22 +15,35 @@ class BienType extends AbstractType
     {
         $builder
             ->add('titre')
-            ->add('description')
             ->add('type', ChoiceType::class, [
                 'choices' => [
-                    'House' => 'house',
-                    'Apartment' => 'apartment',
+                    'Maison' => 'house',
+                    'Appartement' => 'apartment',
+                    'Terrain' => 'land',
+                    'Bureau' => 'office',
+                ],
+            ])
+            ->add('statut', ChoiceType::class, [
+                'choices' => [
+                    'Disponible' => 'disponible',
+                    'Sous offre' => 'sous_offre',
+                    'Vendu' => 'vendu',
+                    'Loué' => 'loue',
                 ],
             ])
             ->add('prix')
-            ->add('surface')
-            ->add('adresse')
-            ->add('statut', ChoiceType::class, [
-                'choices' => [
-                    'For sale' => 'sale',
-                    'Sold' => 'sold',
-                    'Rent' => 'rent',
-                ],
+            ->add('localisation')
+            ->add('ascenseur', null, ['required' => false])
+            ->add('parking', null, ['required' => false])
+            ->add('contactVendeur', null, [
+                'required' => false,
+                'label' => 'Contact vendeur',
+                'help' => 'Téléphone ou email du vendeur',
+            ])
+            ->add('photo', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label' => 'Photo principale',
             ])
         ;
     }

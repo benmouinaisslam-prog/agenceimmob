@@ -3,12 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Bien;
+use App\Entity\Image;
 use App\Form\BienType;
 use App\Repository\BienRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/bien')]
@@ -19,12 +21,14 @@ final class BienController extends AbstractController
     {
         $type = $request->query->get('type');
         $q = $request->query->get('q');
+        $statut = $request->query->get('statut');
 
-        $biens = $bienRepository->search($type, $q);
+        $biens = $bienRepository->search($type, $q, $statut);
 
         return $this->render('bien/index.html.twig', [
             'biens' => $biens,
             'selected_type' => $type,
+            'selected_statut' => $statut,
         ]);
     }
 
@@ -38,6 +42,7 @@ final class BienController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->handlePhotoUpload($form, $bien);
             $entityManager->persist($bien);
             $entityManager->flush();
 
@@ -110,6 +115,7 @@ final class BienController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->handlePhotoUpload($form, $bien);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_bien_index', [], Response::HTTP_SEE_OTHER);
@@ -132,5 +138,32 @@ final class BienController extends AbstractController
         }
 
         return $this->redirectToRoute('app_bien_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function handlePhotoUpload($form, Bien $bien): void
+    {
+        $photoFile = $form->get('photo')->getData();
+        if (!$photoFile) {
+            return;
+        }
+
+        $uploadDir = $this->getParameter('kernel.project_dir').'/public/uploads/biens';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $filename = bin2hex(random_bytes(8));
+        $ext = $photoFile->guessExtension() ?: 'bin';
+        $finalName = $filename.'.'.$ext;
+
+        try {
+            $photoFile->move($uploadDir, $finalName);
+        } catch (FileException $e) {
+            return; // silently ignore upload failures
+        }
+
+        $image = new Image();
+        $image->setPath('uploads/biens/'.$finalName);
+        $bien->addImage($image);
     }
 }

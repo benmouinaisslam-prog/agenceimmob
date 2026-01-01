@@ -17,11 +17,11 @@ class BienRepository extends ServiceEntityRepository
     }
 
     /**
-     * Search biens by optional type and text query (in title or description).
+     * Search biens with optional filters.
      *
      * @return Bien[]
      */
-    public function search(?string $type, ?string $q): array
+    public function search(?string $type, ?string $q, ?string $statut): array
     {
         $qb = $this->createQueryBuilder('b');
 
@@ -31,8 +31,13 @@ class BienRepository extends ServiceEntityRepository
         }
 
         if ($q) {
-            $qb->andWhere('b.titre LIKE :q OR b.description LIKE :q')
+            $qb->andWhere('b.titre LIKE :q OR b.localisation LIKE :q')
                ->setParameter('q', '%'.str_replace('%','\\%',$q).'%');
+        }
+
+        if ($statut) {
+            $qb->andWhere('b.statut = :statut')
+               ->setParameter('statut', $statut);
         }
 
         return $qb->orderBy('b.id', 'DESC')

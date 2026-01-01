@@ -6,3 +6,8 @@ app_logout:
     path: /logout
     controller: App\Controller\SecurityController::logout
     methods: [GET]
+
+app_register:
+    path: /register
+    controller: App\Controller\SecurityController::register
+    methods: [GET, POST]

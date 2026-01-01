@@ -1,62 +1,82 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Bien index{% endblock %}
+{% block title %}Annonces immobilières{% endblock %}
 
 {% block body %}
-    <h1>Bien index</h1>
+    <section class="hero">
+        <h1>Découvrez nos biens</h1>
+        <p>Maisons, appartements et terrains sélectionnés pour vos projets d'achat ou de location.</p>
+    </section>
 
-    <form method="get" action="{{ path('app_bien_index') }}">
-        <input type="text" name="q" placeholder="Search title or description" value="{{ app.request.get('q') }}">
-        <select name="type">
-            <option value="">All types</option>
-            <option value="house" {% if selected_type == 'house' %}selected{% endif %}>House</option>
-            <option value="apartment" {% if selected_type == 'apartment' %}selected{% endif %}>Apartment</option>
-        </select>
-        <button type="submit">Search</button>
-        {% if selected_type or app.request.get('q') %}
-            <a href="{{ path('app_bien_index') }}">clear</a>
-        {% endif %}
-    </form>
+    <section class="filters">
+        <form method="get" action="{{ path('app_bien_index') }}">
+            <div class="field">
+                <label for="q">Recherche</label>
+                <input id="q" type="text" name="q" placeholder="Titre ou localisation" value="{{ app.request.get('q') }}">
+            </div>
+            <div class="field">
+                <label for="type">Type</label>
+                <select id="type" name="type">
+                    <option value="">Tous</option>
+                    <option value="house" {% if selected_type == 'house' %}selected{% endif %}>Maison</option>
+                    <option value="apartment" {% if selected_type == 'apartment' %}selected{% endif %}>Appartement</option>
+                    <option value="land" {% if selected_type == 'land' %}selected{% endif %}>Terrain</option>
+                    <option value="office" {% if selected_type == 'office' %}selected{% endif %}>Bureau</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="statut">Statut</label>
+                <select id="statut" name="statut">
+                    <option value="">Tous</option>
+                    <option value="disponible" {% if app.request.get('statut') == 'disponible' %}selected{% endif %}>Disponible</option>
+                    <option value="sous_offre" {% if app.request.get('statut') == 'sous_offre' %}selected{% endif %}>Sous offre</option>
+                    <option value="vendu" {% if app.request.get('statut') == 'vendu' %}selected{% endif %}>Vendu</option>
+                    <option value="loue" {% if app.request.get('statut') == 'loue' %}selected{% endif %}>Loué</option>
+                </select>
+            </div>
+            <button class="btn" type="submit">Filtrer</button>
+            {% if selected_type or app.request.get('q') or app.request.get('statut') %}
+                <a class="btn outline" href="{{ path('app_bien_index') }}">Réinitialiser</a>
+            {% endif %}
+        </form>
+    </section>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Type</th>
-                <th>Prix</th>
-                <th>Surface</th>
-                <th>Adresse</th>
-                <th>Statut</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="grid">
         {% for bien in biens %}
-            <tr>
-                <td>{{ bien.id }}</td>
-                <td>{{ bien.titre }}</td>
-                <td>{{ bien.description }}</td>
-                <td>{{ bien.type }}</td>
-                <td>{{ bien.prix }}</td>
-                <td>{{ bien.surface }}</td>
-                <td>{{ bien.adresse }}</td>
-                <td>{{ bien.statut }}</td>
-                <td>
-                    <a href="{{ path('app_bien_show', {'id': bien.id}) }}">show</a>
-                    <a href="{{ path('app_bien_edit', {'id': bien.id}) }}">edit</a>
-                </td>
-            </tr>
+            <article class="card">
+                <div class="card-header">
+                    <div class="pill">{{ bien.type|capitalize }}</div>
+                    {% if bien.mainImagePath %}
+                        <img src="/{{ bien.mainImagePath }}" alt="{{ bien.titre }}" style="width:100%;border-radius:10px;margin-top:10px;">
+                    {% endif %}
+                </div>
+                <h3>{{ bien.titre }}</h3>
+                <p class="meta">{{ bien.localisation }}</p>
+                <div class="stack">
+                    <strong>{{ bien.prix|number_format(0, '', ' ') }} €</strong>
+                    <span class="meta">Statut : {{ bien.statut }}</span>
+                    <span class="meta">Ascenseur : {{ bien.ascenseur ? 'Oui' : 'Non' }} • Parking : {{ bien.parking ? 'Oui' : 'Non' }}</span>
+                    {% if bien.contactVendeur %}
+                        <span class="meta">Contact vendeur : {{ bien.contactVendeur }}</span>
+                    {% endif %}
+                </div>
+                <div class="card-actions">
+                    <a class="btn" href="{{ path('app_bien_show', {'id': bien.id}) }}">Voir</a>
+                    {% if app.user %}
+                        <a href="{{ path('app_bien_edit', {'id': bien.id}) }}">Modifier</a>
+                    {% endif %}
+                </div>
+            </article>
         {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
+            <article class="card">
+                <p>Aucune annonce trouvée.</p>
+            </article>
         {% endfor %}
-        </tbody>
-    </table>
+    </div>
 
     {% if app.user %}
-        <a href="{{ path('app_bien_new') }}">Create new</a>
+        <p style="margin-top:20px;">
+            <a class="btn" href="{{ path('app_bien_new') }}">Publier un bien</a>
+        </p>
     {% endif %}
 {% endblock %}
